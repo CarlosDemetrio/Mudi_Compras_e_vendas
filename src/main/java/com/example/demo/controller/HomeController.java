@@ -26,39 +26,14 @@ public class HomeController {
     @Autowired
     PedidoRepository pedidoRepository;
 
-    @Autowired
-    UserRepository userRepository;
-
     @GetMapping
     public String home(Model model, Principal principal){
-
-
-        List<Pedido> pedidos = pedidoRepository.findAllByUser(principal.getName());
-
-        model.addAttribute("pedidos", pedidos);
-
-
-        return "Home";
-    }
-    @GetMapping("/{status}")
-    public String porstatus(@PathVariable("status") String status, Model model){
-
-        //ordena por data de entrega os arquivos do banco de dados
-        Sort sort = Sort.by("dataEntrega").ascending();
-
-
-        //limita quantidade de itens que irão aparecer na página
-        PageRequest paginacao = PageRequest.of(0,5, sort);
+        Sort sort = Sort.by("dataEntrega").descending();
+        PageRequest paginacao = PageRequest.of(0, 10, sort);
 
         List<Pedido> pedidos = pedidoRepository.findByStatus(StatusPedido.ENTREGUE, paginacao);
-
         model.addAttribute("pedidos", pedidos);
-        model.addAttribute("status", status);
-
         return "Home";
     }
-    @ExceptionHandler(IllegalArgumentException.class)
-    public String onError(){
-        return "redirect:home";
-    }
+
 }

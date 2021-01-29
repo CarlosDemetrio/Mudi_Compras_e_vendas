@@ -10,6 +10,7 @@ public class User {
     @Id
     private  String username;
     private String password;
+    private String email;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private List<Pedido> pedidos;
